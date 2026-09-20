@@ -12,7 +12,7 @@ function TaskList({ tasks, onDelete, onToggleStatus }) {
 
             <p>{task.description}</p>
 
-            <p className="status">
+            <p className={`status status-${task.status.toLowerCase()}`}>
               Status: {task.status}
             </p>
 

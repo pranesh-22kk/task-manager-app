@@ -25,9 +25,13 @@
   --accent-2: #8b5cf6;
   --accent-3: #ec4899;
 
-  --success: #059669;
-  --success-soft: #ecfdf5;
-  --success-border: #a7f3d0;
+  --success: #047857;
+  --success-soft: #d1fae5;
+  --success-border: #6ee7b7;
+
+  --warning: #b45309;
+  --warning-soft: #fef3c7;
+  --warning-border: #fcd34d;
 
   --danger: #e11d48;
   --danger-soft: #fff1f2;
@@ -130,7 +134,6 @@ button {
   color: var(--text);
 }
 
-/* Gradient bar accent on the left of the title */
 #root > div > h1::before {
   content: "";
   position: absolute;
@@ -156,7 +159,6 @@ form {
   overflow: hidden;
 }
 
-/* Gradient top bar on the form */
 form::before {
   content: "";
   position: absolute;
@@ -262,7 +264,7 @@ form button[type="submit"]:active {
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-/* ---------- Task list header ---------- */
+/* ---------- Task list ---------- */
 .tasks-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
@@ -323,7 +325,6 @@ form button[type="submit"]:active {
     transform var(--dur) var(--ease);
 }
 
-/* Gradient left edge accent */
 .task-card::before {
   content: "";
   position: absolute;
@@ -363,7 +364,7 @@ form button[type="submit"]:active {
   word-break: break-word;
 }
 
-/* ---------- Status pill ---------- */
+/* ---------- Status pill (base) ---------- */
 .task-card .status {
   align-self: flex-start;
   display: inline-flex;
@@ -375,10 +376,10 @@ form button[type="submit"]:active {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--success);
-  background: var(--success-soft);
-  border: 1px solid var(--success-border);
   border-radius: 999px;
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
 .task-card .status::before {
@@ -387,7 +388,50 @@ form button[type="submit"]:active {
   height: 6px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  flex: none;
+}
+
+/* ---------- Pending → Amber / Yellow ---------- */
+.task-card .status-pending {
+  color: var(--warning);
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 1px solid var(--warning-border);
+  box-shadow: 0 2px 8px -3px rgba(234, 179, 8, 0.55);
+}
+
+.task-card .status-pending::before {
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  animation: pendingPulse 2s ease-in-out infinite;
+}
+
+/* ---------- Completed → Emerald / Green ---------- */
+.task-card .status-completed {
+  color: var(--success);
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border: 1px solid var(--success-border);
+  box-shadow: 0 2px 8px -3px rgba(5, 150, 105, 0.5);
+}
+
+.task-card .status-completed::before {
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.task-card:hover .status {
+  transform: translateX(2px);
+}
+
+/* ---------- Pending pulse animation ---------- */
+@keyframes pendingPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.08);
+  }
 }
 
 /* ---------- Action buttons ---------- */
@@ -418,7 +462,6 @@ form button[type="submit"]:active {
   transform: translateY(1px);
 }
 
-/* Toggle status */
 .status-button {
   color: var(--primary);
   background: var(--primary-soft);
@@ -432,7 +475,6 @@ form button[type="submit"]:active {
   box-shadow: 0 6px 16px -4px rgba(79, 70, 229, 0.5);
 }
 
-/* Delete */
 .delete-button {
   color: var(--danger);
   background: var(--danger-soft);
@@ -552,5 +594,9 @@ form textarea:focus-visible {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+
+  .task-card .status-pending::before {
+    animation: none;
   }
 }
