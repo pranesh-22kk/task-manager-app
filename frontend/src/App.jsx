@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
+
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
+
 import "./index.css";
+
+const API_URL = "https://task-manager-api-gcrs.onrender.com/api/tasks";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -10,7 +14,7 @@ function App() {
   useEffect(() => {
     const loadTasks = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/tasks");
+        const response = await fetch(API_URL);
         const data = await response.json();
 
         setTasks(data);
@@ -25,7 +29,7 @@ function App() {
   // POST task
   const addTask = async (title, description) => {
     try {
-      const response = await fetch("http://localhost:5000/api/tasks", {
+      const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +51,7 @@ function App() {
   // DELETE task
   const deleteTask = async (taskId) => {
     try {
-      await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      await fetch(`${API_URL}/${taskId}`, {
         method: "DELETE",
       });
 
@@ -71,18 +75,15 @@ function App() {
       const newStatus =
         task.status === "Pending" ? "Completed" : "Pending";
 
-      const response = await fetch(
-        `http://localhost:5000/api/tasks/${taskId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            status: newStatus,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus,
+        }),
+      });
 
       const updatedTask = await response.json();
 
